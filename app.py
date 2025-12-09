@@ -9,9 +9,7 @@ st.set_page_config(page_title="Guía de gráficos HSE / SST", layout="wide")
 st.title("📊 Guía práctica para elegir el gráfico adecuado en análisis de Incidentalidad (HSE / SST)")
 
 st.markdown("""
-Esta aplicación está diseñada para ayudar al personal de **Seguridad y Salud en el Trabajo (SST)**  
-a identificar cuál es el **gráfico más adecuado** para cada tipo de análisis relacionado con  
-incidentes, accidentalidad, severidad, frecuencia, horas-hombre trabajadas y cumplimiento.
+Esta aplicación está diseñada para ayudar al personal de **Seguridad y Salud en el Trabajo (SST)** a identificar cuál es el **gráfico más adecuado** para cada tipo de análisis relacionado con incidentes, accidentalidad, severidad, frecuencia, horas-hombre trabajadas y cumplimiento.
 """)
 
 # ---------------------------------------------------------
@@ -326,3 +324,4 @@ st.success("""
 - **HHT por área →** Barras  
 - **Variabilidad HHT →** Histograma  
 """)
+
