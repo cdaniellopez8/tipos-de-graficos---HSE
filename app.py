@@ -307,19 +307,22 @@ Esto ayuda a entender la **carga operativa real** en la empresa.
 
     st.plotly_chart(px.histogram(df_hht_hist, x="HHT", nbins=20), use_container_width=True)
 
-# ========================= 13. GRAFICO 3 VARIABLES =========================
+# ========================= 13. GRAFICO 3 VARIABLES (MIXTO) =========================
 elif opcion == "Acciones seguras por área vs porcentaje de cumplimiento":
-    st.subheader("📌 Acciones seguras realizadas por área vs porcentaje de cumplimiento")
+    st.subheader("📌 Acciones seguras por área vs porcentaje de cumplimiento")
+    
     st.info("""
-Este gráfico mezcla **barras y línea** porque permite entender dos cosas al mismo tiempo:
-
-- Cuántas **acciones seguras** (inspecciones, pausas activas, actividades preventivas) se realizaron por área.
-- Qué tan cerca está cada área del **porcentaje de cumplimiento mensual** establecido.
-
-Esto es clave en SST porque:
-- Un área puede hacer muchas actividades, pero **no cumplir la meta**.
-- Otra puede cumplir el 100% con pocas actividades porque su meta es baja.
-- Permite priorizar acompañamiento y recursos.
+Este gráfico es ideal para SST porque combina **cantidad y desempeño**:
+    
+- Las **barras** muestran cuántas actividades seguras realizó cada área  
+  (inspecciones, pausas activas, reportes seguros, observaciones, etc.)
+- La **línea con segundo eje Y** muestra el porcentaje de cumplimiento del programa.
+- Las **etiquetas sobre cada punto** permiten ver el cumplimiento exacto.
+    
+Esto permite identificar:
+- Áreas que hacen muchas actividades pero **no cumplen la meta**
+- Áreas que cumplen al 100% con esfuerzo eficiente
+- Dónde priorizar apoyo, capacitaciones o inspecciones
 """)
 
     # Datos ficticios
@@ -329,41 +332,51 @@ Esto es clave en SST porque:
         "Cumplimiento_%": np.random.uniform(40, 100, 5).round(1)
     })
 
-    # Gráfico combinado
-    fig = go.Figure()
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # Barras
-    fig.add_trace(go.Bar(
-        x=df_mix["Área"],
-        y=df_mix["Actividades_seguras"],
-        name="Actividades seguras realizadas",
-        marker_color="steelblue"
-    ))
+    fig.add_trace(
+        go.Bar(
+            x=df_mix["Área"],
+            y=df_mix["Actividades_seguras"],
+            name="Actividades seguras realizadas",
+            marker_color="steelblue"
+        ),
+        secondary_y=False
+    )
 
-    # Línea de porcentaje
-    fig.add_trace(go.Scatter(
-        x=df_mix["Área"],
-        y=df_mix["Cumplimiento_%"],
-        name="Cumplimiento (%)",
-        mode="lines+markers",
-        line=dict(color="orange", width=3)
-    ))
+    # Línea con segundo eje
+    fig.add_trace(
+        go.Scatter(
+            x=df_mix["Área"],
+            y=df_mix["Cumplimiento_%"],
+            name="Cumplimiento (%)",
+            mode="lines+markers+text",
+            text=df_mix["Cumplimiento_%"].astype(str) + "%",
+            textposition="top center",
+            line=dict(color="orange", width=3),
+            marker=dict(size=9)
+        ),
+        secondary_y=True
+    )
 
     fig.update_layout(
-        title="Actividades seguras realizadas vs cumplimiento por área",
+        title="Actividades seguras realizadas vs porcentaje de cumplimiento por área",
+        xaxis_title="Área",
         yaxis_title="Actividades seguras",
-        yaxis2=dict(
-            overlaying="y",
-            side="right",
-            title="Cumplimiento (%)",
-            range=[0, 120]
-        ),
-        xaxis_title="Área"
+        legend_title="Variables evaluadas",
+        bargap=0.3
+    )
+
+    fig.update_yaxes(
+        title_text="Cumplimiento (%)",
+        secondary_y=True,
+        range=[0, 120]
     )
 
     st.plotly_chart(fig, use_container_width=True)
 
-    st.write("📄 **Tabla de datos generados:**")
+    st.write("📄 **Tabla de datos usados en el gráfico:**")
     st.dataframe(df_mix)
 
 # ---------------------------------------------------------
@@ -384,5 +397,6 @@ st.success("""
 - **HHT por área →** Barras  
 - **Variabilidad HHT →** Histograma  
 """)
+
 
 
