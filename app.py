@@ -84,6 +84,7 @@ opcion = st.selectbox(
         "Proporción de tipos de incidente",
         "Seguimiento de acciones",
         "Pendientes vs cerrados",
+        "Acciones seguras por área vs porcentaje de cumplimiento",
         "Cumplimiento de objetivos HSE",
         "Índice de Frecuencia y Severidad",
         "Horas Hombre Trabajadas por área",
@@ -306,6 +307,65 @@ Esto ayuda a entender la **carga operativa real** en la empresa.
 
     st.plotly_chart(px.histogram(df_hht_hist, x="HHT", nbins=20), use_container_width=True)
 
+# ========================= 13. GRAFICO 3 VARIABLES =========================
+elif opcion == "Acciones seguras por área vs porcentaje de cumplimiento":
+    st.subheader("📌 Acciones seguras realizadas por área vs porcentaje de cumplimiento")
+    st.info("""
+Este gráfico mezcla **barras y línea** porque permite entender dos cosas al mismo tiempo:
+
+- Cuántas **acciones seguras** (inspecciones, pausas activas, actividades preventivas) se realizaron por área.
+- Qué tan cerca está cada área del **porcentaje de cumplimiento mensual** establecido.
+
+Esto es clave en SST porque:
+- Un área puede hacer muchas actividades, pero **no cumplir la meta**.
+- Otra puede cumplir el 100% con pocas actividades porque su meta es baja.
+- Permite priorizar acompañamiento y recursos.
+""")
+
+    # Datos ficticios
+    df_mix = pd.DataFrame({
+        "Área": ["Operaciones", "Mantenimiento", "Administrativa", "Seguridad Física", "Ambiental"],
+        "Actividades_seguras": np.random.randint(10, 60, 5),
+        "Cumplimiento_%": np.random.uniform(40, 100, 5).round(1)
+    })
+
+    # Gráfico combinado
+    fig = go.Figure()
+
+    # Barras
+    fig.add_trace(go.Bar(
+        x=df_mix["Área"],
+        y=df_mix["Actividades_seguras"],
+        name="Actividades seguras realizadas",
+        marker_color="steelblue"
+    ))
+
+    # Línea de porcentaje
+    fig.add_trace(go.Scatter(
+        x=df_mix["Área"],
+        y=df_mix["Cumplimiento_%"],
+        name="Cumplimiento (%)",
+        mode="lines+markers",
+        line=dict(color="orange", width=3)
+    ))
+
+    fig.update_layout(
+        title="Actividades seguras realizadas vs cumplimiento por área",
+        yaxis_title="Actividades seguras",
+        yaxis2=dict(
+            overlaying="y",
+            side="right",
+            title="Cumplimiento (%)",
+            range=[0, 120]
+        ),
+        xaxis_title="Área"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.write("📄 **Tabla de datos generados:**")
+    st.dataframe(df_mix)
+
 # ---------------------------------------------------------
 # GUÍA FINAL SST
 # ---------------------------------------------------------
@@ -324,4 +384,5 @@ st.success("""
 - **HHT por área →** Barras  
 - **Variabilidad HHT →** Histograma  
 """)
+
 
