@@ -362,12 +362,18 @@ Esto permite identificar:
     )
 
     fig.update_layout(
-        title="Actividades seguras realizadas vs porcentaje de cumplimiento por área",
-        xaxis_title="Área",
-        yaxis_title="Actividades seguras",
-        legend_title="Variables evaluadas",
-        bargap=0.3
-    )
+             title="Actividades seguras realizadas vs porcentaje de cumplimiento por área",
+             xaxis_title="Área",
+             yaxis_title="Actividades seguras",
+             bargap=0.3,
+             legend_title="Variables evaluadas",
+             font=dict(
+                 family="Arial",
+                 size=14,
+                 color="black"     # <--- letras negras fuertes
+             )
+         )
+
 
     fig.update_yaxes(
         title_text="Cumplimiento (%)",
@@ -398,6 +404,7 @@ st.success("""
 - **HHT por área →** Barras  
 - **Variabilidad HHT →** Histograma  
 """)
+
 
 
 
