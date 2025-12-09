@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 st.set_page_config(page_title="Guía de gráficos HSE / SST", layout="wide")
 
@@ -397,6 +398,7 @@ st.success("""
 - **HHT por área →** Barras  
 - **Variabilidad HHT →** Histograma  
 """)
+
 
 
 
